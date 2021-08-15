@@ -1,0 +1,16 @@
+{% comment %}
+    1) return the original cart item count, when there is only 1 or 0 item in cart
+    2) otherwise, check if any bundle item exists in cart; If yes, deduct them from cart item quantity
+{% endcomment %}
+
+{% if cart.item_count <= 1 %}
+    {{ cart.item_count }}
+{% else %}
+    {% assign cart_item_count = cart.item_count %}
+    {% for item in cart.items %}
+        {% if item.properties['_is_bundle_item'] == 'yes' %}
+            {% assign cart_item_count = cart_item_count | minus: item.quantity %}
+        {% endif %}
+    {% endfor %}
+    {{ cart_item_count }}
+{% endif %}

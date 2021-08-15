@@ -1,0 +1,32 @@
+{% comment %} 
+    @item - the cart item object passed in
+    @bundle_items_variants - the variant IDs of the bundle items in a string
+{% endcomment %}
+
+
+{% if item.product.type =='bundle' and bundle_items_variants != blank %}
+    {% comment %} Generate a normal quantity selector for bundle product itself {% endcomment %}
+    <input 
+    type="number"
+    class="cart__quantity-selector bundle-quantity" 
+    name="updates[{{ item.variant_id }}]" 
+    id="updates_{{ item.key }}" 
+    value="{{ item.quantity }}" 
+    min="0" 
+    aria-label="{{ 'cart.label.quantity' | t }}"
+    data-bundle-id="{{ item.variant_id }}">
+
+    {% comment %} Generate hidden inputs for bundle item quantities {% endcomment %}
+    {% assign bundle_items_variants = bundle_items_variants | split : ',' %}
+    {% for variant_id in bundle_items_variants %}
+        <input 
+        type="hidden"
+        class="cart__quantity-selector bundle-item-quantity" 
+        name="updates[{{ variant_id }}]" 
+        id="updates_{{ variant_id }}" 
+        value="{{ item.quantity }}" 
+        min="0" 
+        aria-label="{{ 'cart.label.quantity' | t }}"
+        data-bundle-id="{{ item.variant_id }}">
+    {% endfor %}
+{% endif %}
