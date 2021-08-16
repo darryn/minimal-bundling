@@ -1,18 +1,19 @@
 
-{% for bundle_collection in bundle_collections %}
-    {% assign collection_id = bundle_collection | last %}
+    {% assign collection_id = bundle_collection %}
 
     {% for collection in collections %}
         {% if collection.id == collection_id and collection.products_count > 0 %}
-            <label for="{{ collection.title }}">{{ collection.title }}:</label>
-            <select name="{{ collection.title }}" id="{{ collection.id }}" class="bundle-select">
-                <option value="" selected>Please select</option>
-                {% for product in collection.products %}
-                    <option value="{{ product.variants[0].id }}">{{ product.title }} &#215; 1 - {{ product.price | money_with_currency }}</option>
-                {% endfor %}
-            </select>
+            {% for product in collection.products %}
+                <label for="{{ product.title }}">{{ product.title }}:</label>
+                <select name="{{ product.title }}" id="{{ product.id }}" class="bundle-select">
+                    <option value="" selected>Please select</option>
+                    {% for variant in product.variants %}
+                        <option value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
+                    {% endfor %}
+                </select>
+            {% endfor %}
         {% endif %}
     {% endfor %}
-{% endfor %}
+
 
 

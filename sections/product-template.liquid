@@ -205,7 +205,7 @@
             </select>
 
             {% if product.type == 'bundle' %}
-              {% render 'bundle-selector', bundle_collections: product.metafields.collections %}
+              {% render 'bundle-selector', bundle_collection: product.metafields.my_fields.bundle_collection_id %}
             {% endif %}
 
             <div class="product-single__quantity{% unless section.settings.product_quantity_enable %} is-hidden{% endunless %}">
