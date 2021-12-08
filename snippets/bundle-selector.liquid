@@ -1,6 +1,6 @@
 
 {% for bundle_item in product.metafields.bundle_items %}
-{{ bundle_item.last }}
+{{ bundle_item.last.object }}
   <label for="{{ product.title }}">{{ product.title }}:</label>
   <select name="{{ product.title }}" id="{{ product.id }}" class="bundle-select">
     <option value="" selected>Please select</option>
