@@ -1,5 +1,6 @@
 
-{% for product in product.metafields.bundle_items %}
+{% for bundle_item in product.metafields.bundle_items %}
+{{ bundle_item }}
   <label for="{{ product.title }}">{{ product.title }}:</label>
   <select name="{{ product.title }}" id="{{ product.id }}" class="bundle-select">
     <option value="" selected>Please select</option>
