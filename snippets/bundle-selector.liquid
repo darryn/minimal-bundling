@@ -1,0 +1,13 @@
+
+{% for bundle_item in product.metafields.bundle_items %}
+{% assign current_bundle_item = bundle_item.last.value %}
+  <label for="{{ current_bundle_item.title }}">{{ current_bundle_item.title }}:</label>
+  <select name="{{ current_bundle_item.title }}" id="{{ current_bundle_item.id }}" class="bundle-select">
+    <option value="" selected>Please select</option>
+    {% for variant in current_bundle_item.variants %}
+    <option value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
+    {% endfor %}
+  </select>
+{% endfor %}
+
+

@@ -113,7 +113,8 @@
             <a href="{{ routes.cart_url }}" class="cart-page-link">
               {{ 'layout.cart.title' | t }}{% unless cart.item_count == 0 %}:{% endunless %}
               <span class="cart-count header-bar__cart-count{% if cart.item_count == 0 %} hidden-count{% endif %}">
-                {{ cart.item_count }}
+                {% comment %} {{ cart.item_count }} {% endcomment %}
+                {% render 'cart-item-count' %}
               </span>
             </a>
           </div>
