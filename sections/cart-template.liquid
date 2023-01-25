@@ -34,15 +34,7 @@
         Loop through products in the cart
       {% endcomment %}
       {% for item in cart.items %}
-        {% comment %} Check whether it is a bundle item and capture the boolean flag value {% endcomment %}
-        {% assign item_properties = item.properties | join: ',' %}
-        {% if item_properties contains "_is_bundle_item" %}
-          {% assign is_bundle_item = true %}
-        {% else %}
-          {% assign is_bundle_item = false %}
-        {% endif %}
 
-        {% unless is_bundle_item %}
           <div class="cart__row">
             <div class="grid--full cart__row--table-large">
 
@@ -116,20 +108,12 @@
 
                         {% endunless %}
 
-                        {% comment %} If the item is a bundle product, read out the variant IDs of the bundle items from the bundle's properties {% endcomment %}
-                        {% if p.first == '_bundle_items_variants' %}
-                          {% assign bundle_items_variants = p.last | remove: '[' | remove: ']' | remove: ' ' %}
-                        {% endif %}
 
                       {% endfor %}
                     {% endif %}
 
                     <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" 
                     class="cart__remove"
-                    {% if item.product.type=='bundle' %}
-                      data-product-type="bundle"
-                      data-variants='{{ item.variant_id | append: "," | append: bundle_items_variants }}'
-                    {% endif %}
                     >
                       <small>{{ 'cart.general.remove' | t }}</small>
                     </a>
@@ -169,13 +153,7 @@
 
                   <div class="grid__item one-quarter one-half medium-down--one-third text-center">
                     <label for="updates_{{ item.key }}" class="cart__mini-labels">{{ 'cart.label.quantity' | t }}</label>
-                    {% if item.product.type == 'bundle' %}
-                      {% render 'cart-bundle-quantity-selector', item: item, bundle_items_variants: bundle_items_variants %}
-                    {% elsif is_bundle_item == true %}
-                      {% comment %} No quantity input for user to select for bundle items {% endcomment %}
-                    {% else %}
                       <input type="number" class="cart__quantity-selector" name="updates[{{ item.variant_id }}]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" aria-label="{{ 'cart.label.quantity' | t }}">
-                    {% endif %}
                   </div>
 
                   <div class="grid__item one-quarter one-half medium-down--one-third text-right">
@@ -206,7 +184,6 @@
 
             </div>
           </div>
-        {% endunless %}
       {% endfor %}
 
       <div class="cart__row">
@@ -289,8 +266,6 @@
   {% endif %}
 </div>
 
-{% comment %} Load custom JS code to handle cart update AJAX for bundle(s) {% endcomment %}
-{{ 'updateCartScript.js' |  asset_url | script_tag }}
 
 
 {% schema %}
