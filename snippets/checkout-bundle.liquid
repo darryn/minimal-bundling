@@ -1,0 +1,40 @@
+{% comment %} 
+    Loop through each item and its property to see whether it is a bundle item; 
+    If it is, use JS code to match its variant ID and hide it from checkout page. 
+{% endcomment %}
+
+{% for item in checkout.line_items %}
+    {% assign propertySize = item.properties | size %}
+    {% if propertySize > 0 %}
+        {% for p in item.properties %}
+            {% if p.first == '_is_bundle_item' and p.last == 'yes' %}   
+                <div hidden class="bundle-item-variant-id">{{ item.variant_id }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+
+<script>
+    (function($){
+        $(document).on(`page:load page:change`, () => {
+            /** 
+             * Select all cart items displayed as HTML elements in a table in checkout page.
+             * Using vanilla JS syntax, as jQuery's each() function seems not working for the table rows here
+             */
+            let cartItemsTableRows = document.querySelectorAll('tr.product')
+            
+            /** 
+             * For each bundle item we have detected from checkout object in liquid, 
+             * hide the corresponding item HTML table row in the checkout page with hidden attribute.
+             */
+            document.querySelectorAll('.bundle-item-variant-id').forEach( bundleItem => {
+                let bundleItemVariantId = bundleItem.innerText
+                cartItemsTableRows.forEach( tr => {
+                    if(tr.dataset.variantId == bundleItemVariantId)
+                        tr.setAttribute('hidden', true)
+                })
+            })
+        })        
+    })(Checkout.$)
+</script>
